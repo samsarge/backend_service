@@ -1,0 +1,10 @@
+<h1>Editing Multitenanted Table</h1>
+
+<p>Warning, updating the name will update the API routes too and you will be provided new endpoints.</p>
+
+<p>Make sure your front end will not be impacted before proceeding.</p>
+
+<%= render 'form', multitenanted_table: @multitenanted_table %>
+
+<%= link_to 'Show', backend_multitenanted_table_path(backend_id: @backend.id, id: @multitenanted_table) %> |
+<%= link_to 'Back', backend_path(@backend) %>

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Multitenanted Records</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Values</th>
+      <th>Multitenanted table</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @multitenanted_records.each do |multitenanted_record| %>
+      <tr>
+        <td><%= multitenanted_record.values %></td>
+        <td><%= multitenanted_record.multitenanted_table_id %></td>
+        <td><%= link_to 'Show', multitenanted_record %></td>
+        <td><%= link_to 'Edit', edit_multitenanted_record_path(multitenanted_record) %></td>
+        <td><%= link_to 'Destroy', multitenanted_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Multitenanted Record', new_multitenanted_record_path %>

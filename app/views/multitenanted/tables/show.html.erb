@@ -1,0 +1,72 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @multitenanted_table.name %>
+</p>
+
+<p>
+  <strong>Structure:</strong>
+  <%= @multitenanted_table.structure %>
+</p>
+
+API Endpoints:
+
+<table style="width:100%">
+  <tr>
+    <th>Action</th>
+    <th>Endpoint</th>
+  </tr>
+
+  <% @multitenanted_table.api_endpoints.each do |k, v| %>
+    <tr>
+      <td style="text-align:center;"><%= k %></td>
+      <td style="text-align:center;"><%= v %></td>
+    </tr>
+  <% end %>
+</table>
+
+<div>
+  <p>JSON Example for Create and Update:</p>
+  <code><%= @multitenanted_table.json_example %></code>
+</div>
+
+<%= link_to 'Edit', edit_backend_multitenanted_table_path(backend_id: @backend.id, id: @multitenanted_table) %> |
+<%= link_to 'Back', backend_path(@backend) %>
+
+<hr>
+
+<table style="width:100%">
+  <tr>
+    <% @multitenanted_table.structure['columns'].each do |col| %>
+      <th> <%= col %> </th>
+    <% end%>
+
+    <th> Actions </th>
+  </tr>
+
+  <% @multitenanted_table.records.each do |record| %>
+    <tr>
+      <% @multitenanted_table.structure['columns'].each do |col| %>
+        <td style="text-align:center;"><%= record.values[col] %></td>
+      <% end %>
+
+      <td style="text-align:center;">
+        <%= link_to 'Edit',
+                    edit_backend_multitenanted_table_record_path(
+                      backend_id: @backend.id,
+                      table_id: @multitenanted_table.id,
+                      id: record.id
+                    ) %> |
+
+        <%= link_to 'Delete',
+                    backend_multitenanted_table_record_path(
+                      backend_id: @backend.id,
+                      table_id: @multitenanted_table,
+                      id: record.id
+                    ),
+                    method: :delete %>
+      </td>
+    </tr>
+  <% end %>
+</table>

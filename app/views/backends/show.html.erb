@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @backend.name %>
+</p>
+
+<p>
+  <strong>Subdomain:</strong>
+  <%= @backend.subdomain %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @backend.user_id %>
+</p>
+
+<%= link_to 'Edit', edit_backend_path(@backend) %> |
+<%= link_to 'New Table', new_backend_multitenanted_table_path(backend_id: @backend.id) %> |
+<%= link_to 'Users', backend_multitenanted_users_path(backend_id: @backend.id) %> |
+<%= link_to 'Back', backends_path %>
+
+<h2>Tables</h2>
+<div>
+  <% @tables.each do |table| %>
+    <div>
+      <%= link_to table.name, backend_multitenanted_table_path(backend_id: @backend.id, id: table.id) %>
+    </div>
+  <% end %>
+</div>

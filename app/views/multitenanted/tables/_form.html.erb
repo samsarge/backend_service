@@ -1,0 +1,37 @@
+<%
+  url = if multitenanted_table.new_record?
+    backend_multitenanted_tables_path
+  else
+    backend_multitenanted_table_path(backend_id: @backend.id, id: multitenanted_table.id)
+  end
+%>
+<%= form_with(model: multitenanted_table,
+              local: true,
+              url: url) do |form| %>
+  <% if multitenanted_table.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(multitenanted_table.errors.count, "error") %> prohibited this multitenanted_table from being saved:</h2>
+
+      <ul>
+        <% multitenanted_table.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    (names will be pluralised)
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :structure %>
+    <%= form.text_field :structure %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

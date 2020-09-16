@@ -1,0 +1,22 @@
+<%= form_with(model: multitenanted_record, local: true) do |form| %>
+  <% if multitenanted_record.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(multitenanted_record.errors.count, "error") %> prohibited this multitenanted_record from being saved:</h2>
+
+      <ul>
+        <% multitenanted_record.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :values %>
+    <%= form.text_field :values %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

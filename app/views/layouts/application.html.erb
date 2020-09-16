@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Backend Service</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+   <p class="notice"><%= notice %></p>
+   <p class="alert"><%= alert %></p>
+
+   <nav>
+     <% if current_user %>
+      <%= link_to 'Backend APIs', backends_path %>
+      <%= link_to 'Log out', destroy_user_session_path, method: :delete %>
+     <% else %>
+      <%= link_to 'Log in', new_user_session_path %>
+     <% end %>
+
+   </nav>
+    <%= yield %>
+  </body>
+</html>

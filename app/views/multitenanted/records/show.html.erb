@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Values:</strong>
+  <%= @multitenanted_record.values %>
+</p>
+
+<p>
+  <strong>Multitenanted table:</strong>
+  <%= @multitenanted_record.multitenanted_table_id %>
+</p>
+
+<%= link_to 'Edit', edit_multitenanted_record_path(@multitenanted_record) %> |
+<%= link_to 'Back', multitenanted_records_path %>

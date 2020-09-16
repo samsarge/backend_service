@@ -1,0 +1,64 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Users</h1>
+
+Manage app users and gain access to API endpoints for sessions and registrations
+
+<div>
+  <code>
+  {
+      "api_v1_user": {
+          "email": "user@user.com",
+          "password": "password"
+      }
+  }
+  </code>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>HTTP Verb</th>
+      <th>Endpoint</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr><td>GET</td> <td>/api/v1/users/sign_in</td> <td>api/v1/sessions#new</td></tr>
+    <tr><td>POST</td> <td>/api/v1/users/sign_in</td> <td>api/v1/sessions#create</td></tr>
+    <tr><td>DELETE</td> <td>/api/v1/users/sign_out</td> <td>api/v1/sessions#destroy</td></tr>
+    <tr><td>GET</td> <td>/api/v1/users/cancel</td> <td>api/v1/registrations#cancel</td></tr>
+    <tr><td>GET</td> <td>/api/v1/users/sign_up</td> <td>api/v1/registrations#new</td></tr>
+    <tr><td>GET</td> <td>/api/v1/users/edit</td> <td>api/v1/registrations#edit</td></tr>
+    <tr><td>PATCH</td> <td>/api/v1/users</td> <td>api/v1/registrations#update</td></tr>
+    <tr><td>PUT</td> <td>/api/v1/users</td> <td>api/v1/registrations#update</td></tr>
+    <tr><td>DELETE</td> <td>/api/v1/users</td> <td>api/v1/registrations#destroy</td></tr>
+    <tr><td>POST</td> <td>/api/v1/users</td> <td>api/v1/registrations#create</td></tr>
+  </tbody>
+</table>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>email</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @multitenanted_users.each do |user| %>
+      <tr>
+        <td><%= user.email %></td>
+        <td><%= link_to 'Show', backend_multitenanted_user_path(backend_id: @backend.id, id: user.id) %></td>
+        <td><%= link_to 'Edit', edit_backend_multitenanted_user_path(backend_id: @backend.id, id: user.id) %></td>
+        <td><%= link_to 'Destroy', backend_multitenanted_user_path(backend_id: @backend.id, id: user.id), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New User', new_backend_multitenanted_user_path(backend_id: @backend.id) %>

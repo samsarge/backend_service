@@ -1,0 +1,2 @@
+module Multitenanted::RecordsHelper
+end
