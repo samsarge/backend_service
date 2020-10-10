@@ -1,5 +1,8 @@
 # The backend for an app, used to distinguish tenants with Apartment
 # wraps databases etc, everything under this tenant should be namespaced
+
+# AKA API, just calling it backend because it will likely wrap all backend functionality
+# for apps later on.
 class Backend < ApplicationRecord
   belongs_to :user
 
