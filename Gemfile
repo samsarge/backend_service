@@ -45,6 +45,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'rspec-rails', '~> 4.0.1'
   gem 'ffaker'
+  gem 'factory_bot'
 end
 
 group :development do
