@@ -22,3 +22,12 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+
+## Specs
+
+For feature specs, download the chrome driver from [here](https://chromedriver.chromium.org/home).
+
+Unzip the archive and move executable to `/usr/local/bin/`
+
+Alternatively, install with homebrew `brew cask install chromedriver`
