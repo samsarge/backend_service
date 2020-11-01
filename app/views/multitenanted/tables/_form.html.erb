@@ -7,6 +7,7 @@
 %>
 <%= form_with(model: multitenanted_table,
               local: true,
+              html: {class: 'space-y-4 w-full md:space-y-8 md:w-2/3'},
               url: url) do |form| %>
   <% if multitenanted_table.errors.any? %>
     <div id="error_explanation">
@@ -20,18 +21,17 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="vlc-input">
     <%= form.label :name %>
     (names will be pluralised)
     <%= form.text_field :name %>
   </div>
 
-  <div class="field">
+  <div class="vlc-input">
     <%= form.label :structure %>
     <%= form.text_field :structure %>
   </div>
 
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+
+  <%= form.submit class: 'vlc-button primary' %>
 <% end %>
