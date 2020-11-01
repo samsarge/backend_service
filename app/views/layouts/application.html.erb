@@ -10,19 +10,39 @@
     <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>
-   <p class="notice"><%= notice %></p>
-   <p class="alert"><%= alert %></p>
+  <body class="relative">
+    <% unless user_signed_in? %>
+      <%= render 'components/alert', position: 'body' if flash.any? %>
+    <% end %>
+    <div class="vlc-wrapper">
+      <% if user_signed_in? %>
+        <header class="vlc-header-footer">
+          <nav class="flex flex-col md:flex-row justify-between items-center text-white w-full m-book-container h-full space-y-4 md:space-y-0 py-4">
+            <div >
+              <h2>Logo</h2>
+            </div>
+            <div class="w-full flex md:justify-end space-x-4 md:space-x-6">
+              <% if current_user %>
+              <%= link_to 'Backend APIs', backends_path %>
+              <%= link_to 'Log out', destroy_user_session_path, method: :delete %>
+              <% else %>
+              <%= link_to 'Log in', new_user_session_path %>
+              <% end %>
+          </div>
+          </nav>
+        </header>
+      <% end %>
 
-   <nav>
-     <% if current_user %>
-      <%= link_to 'Backend APIs', backends_path %>
-      <%= link_to 'Log out', destroy_user_session_path, method: :delete %>
-     <% else %>
-      <%= link_to 'Log in', new_user_session_path %>
-     <% end %>
+     <main class="vlc-container <%= user_signed_in? ? 'user_signed_in' : 'registration' %>">
+       <%= yield %>
+     </main>
 
-   </nav>
-    <%= yield %>
+     <% if user_signed_in? %>
+       <footer class="vlc-header-footer relative">
+       <%= render 'components/alert', position: 'footer' if flash.any? %>
+         <p>Footer here</p>
+       </footer>
+      <% end %>
+    </div>
   </body>
 </html>

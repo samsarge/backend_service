@@ -1,0 +1,25 @@
+$vlc-primary: #FFA510;
+$vlc-secondary: #204E79;
+
+$vlc-white: #fff;
+$vlc-black: #000;
+$vlc-grey: #919191;
+
+$vlc-error: #F31D1D;
+$vlc-success: #12C441;
+
+$vlc-font-color: #333; // dark grey
+
+// Background colour classes
+.vlc-bg-color-primary { background-color: $vlc-primary};
+.vlc-bg-color-secondary { background-color: $vlc-secondary};
+.vlc-bg-color-white { background-color: $vlc-white};
+.vlc-bg-color-red { background-color: $vlc-error};
+.vlc-bg-color-green { background-color: $vlc-success};
+
+// Font colour classes
+.vlc-color-primary { color: $vlc-primary};
+.vlc-color-secondary { color: $vlc-secondary};
+.vlc-color-white { color: $vlc-white};
+.vlc-color-red { background-color: $vlc-error};
+.vlc-color-green { background-color: $vlc-success};

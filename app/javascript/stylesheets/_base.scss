@@ -1,0 +1,37 @@
+* {
+  outline: none!important;
+  /* prevent blue highlight on tap of links, will not work on all browsers! */
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-family: $font-body, 'sans-serif';
+  scroll-behavior: smooth;
+  color: $vlc-font-color;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  height: 100%;
+}
+
+main {
+  flex-grow: 1;
+}
+
+h1, h2, h3, h4, h5, h6 { @apply font-bold; }
+h1 { @apply text-3xl; }
+h2 { @apply text-2xl; }
+h3 { @apply text-xl; }
+h4 { @apply text-lg; }
+h5 { @apply text-base; }
+h6 { @apply text-sm; }
+
+h1, h2 { font-family: $font-heading, 'sans-serif'}
+h3, h4, h5, h6 { font-family: $font-sub-heading, 'sans-serif'}
+
+ul {
+  list-style: none;
+}

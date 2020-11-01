@@ -1,0 +1,24 @@
+
+@font-face {
+  font-family: "Bitter-Regular";
+  src: url("./Bitter-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Bitter-Italic";
+  src: url("./Bitter-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Bitter-Medium";
+  src: url("./Bitter-Medium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+$font-heading: 'Bitter-Italic';
+$font-sub-heading: 'Bitter-Medium';
+$font-body: 'Bitter-Regular';

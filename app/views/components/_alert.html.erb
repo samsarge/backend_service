@@ -1,0 +1,8 @@
+<% flash.each do |key, value| %>
+  <div data-controller="alert" data-target="alert.alert" class="vlc-alert <%= key %> <%= position %> z-100">
+    <div class="flex justify-between items-center space-x-4">      
+      <p><%= value %></p>
+      <p data-action="click->alert#closeAlert">X</p>
+  </div>
+  </div>
+<% end %>

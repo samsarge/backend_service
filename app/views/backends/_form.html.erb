@@ -1,4 +1,4 @@
-<%= form_with(model: backend, local: true) do |form| %>
+<%= form_with(model: backend, local: true, html: {class: 'space-y-4 w-full md:space-y-8 md:w-2/3'}) do |form| %>
   <% if backend.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(backend.errors.count, "error") %> prohibited this backend from being saved:</h2>
@@ -11,17 +11,16 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="vlc-input">
     <%= form.label :name %>
     <%= form.text_field :name %>
   </div>
 
-  <div class="field">
+  <div class="vlc-input">
     <%= form.label :subdomain %>
     <%= form.text_field :subdomain %>
   </div>
 
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+  <%= form.submit class: 'vlc-button primary' %>
+
 <% end %>

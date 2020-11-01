@@ -1,0 +1,49 @@
+.vlc-input {
+  input{
+    width: 100%;
+    &:not([type="submit"]){
+      transition: border 350ms ease-in-out;
+      border-bottom: 1px solid $vlc-grey;
+      &:focus  {
+        border-color: $vlc-primary;
+      }
+    }
+    &.no-border {
+      border: none!important;
+    }
+    &.bordered {
+      border: 1px solid $vlc-grey;
+      border-radius: 5px;
+      @apply p-2;
+    }
+  }
+  .field_with_errors input {
+    border-bottom: 1px solid $vlc-error;
+  }
+  &:focus-within {
+    label, span {
+      transition: color 350ms ease-in-out;
+      color: $vlc-primary;
+    }
+    &.devise {
+      border-color: $vlc-primary;
+      img {
+        transition: transform 350ms;
+        transform: scale(1.2);
+      }
+    }
+  }
+}
+
+.vlc-file-upload {
+  input[type="file"] {
+    display: none;
+  }
+
+  .vlc-button {
+    &::after{
+      content: "" !important;
+    }
+
+  }
+}

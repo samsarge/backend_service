@@ -1,4 +1,4 @@
-<%= form_with(model: multitenanted_record, local: true) do |form| %>
+<%= form_with(model: multitenanted_record, local: true, html: {class: 'space-y-4 w-full md:space-y-8 md:w-2/3'}) do |form| %>
   <% if multitenanted_record.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(multitenanted_record.errors.count, "error") %> prohibited this multitenanted_record from being saved:</h2>
@@ -11,12 +11,11 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="vlc-input">
     <%= form.label :values %>
     <%= form.text_field :values %>
   </div>
 
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+  <%= form.submit class: 'vlc-button primary' %>
+
 <% end %>
