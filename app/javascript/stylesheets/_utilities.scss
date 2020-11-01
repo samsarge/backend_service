@@ -40,9 +40,9 @@
 .vlc-alert {
   position: absolute;
   color: $vlc-white;
-  @apply p-6;
+  @apply py-4 px-8;
   @include media-breakpoint-up(md) {
-    @apply px-8;
+    @apply py-6 px-10;
   }
   border: none;
   border-radius: 10px;
