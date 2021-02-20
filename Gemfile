@@ -32,10 +32,6 @@ gem 'rack-cors'
 
 gem 'apartment', github: 'influitive/apartment', branch: 'development'
 
-gem 'fast_jsonapi'
-
-gem 'chargebee'#, '~> 2.7', '>= 2.7.5'
-
 gem 'redis'
 gem 'redis-namespace'
 

@@ -11,7 +11,8 @@ module Api
       private
 
       def respond_with(resource, _opts = {})
-        render json: Multitenanted::UserSerializer.new(resource).serialized_json
+        # TODO: Add user serializer for multitenanted users
+        render json: resource
       end
 
       def respond_to_on_destroy

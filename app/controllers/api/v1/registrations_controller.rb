@@ -10,12 +10,14 @@ module Api
 
         return render_validation_error(resource) unless resource.save
 
-        render json: UserSerializer.new(resource).serialized_json
+        # TODO: Add user serializzer
+        render json: resource
       end
 
       def render_resource(resource)
         if resource.errors.empty?
-          render json: Multitenanted::UserSerializer.new(resource).serialized_json
+          # TODO: Add user serializer
+          render json: resource
         else
           render_validation_error(resource)
         end

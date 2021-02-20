@@ -1,7 +1,6 @@
 module Api
   module V1
     # Multitenanted records
-    # Implement fast json api serializer
     class RecordsController < ApplicationController
       skip_before_action :verify_authenticity_token # cause api, but should cors probably later
 
@@ -9,18 +8,21 @@ module Api
 
       def index
         records = table.records
-        render json: ::Multitenanted::RecordSerializer.new(records).serialized_json
+        # TODO: Add records serializer
+        render json: records
       end
 
       def show
         record = table.records.find(params[:id])
-        render json: ::Multitenanted::RecordSerializer.new(record).serialized_json
+        # TODO: Add records serializer
+        render json: record
       end
 
       def create
         record = table.records.new(values: dynamic_record_params)
         if record.save
-          render json: ::Multitenanted::RecordSerializer.new(record).serialized_json
+          # TODO: Add records serializer
+          render json: record
         else
           render ::JsonResponse.validation_error(record)
         end
@@ -29,7 +31,8 @@ module Api
       def update
         record = table.records.find(params[:id])
         if record.update(values: dynamic_record_params)
-          render json: ::Multitenanted::RecordSerializer.new(record).serialized_json
+          # TODO: Add records serializer
+          render json: record
         else
           render ::JsonResponse.validation_error(record)
         end
@@ -37,8 +40,8 @@ module Api
 
       def destroy
         record = table.records.find(params[:id])
-        # Ok well we shouldn't allow everyone to just destroy everything? Maybe we even remove this
-        # URL or something? No idea
+        # Will add in a permissions system for users to manage what people can do
+        # with all API endpoints and whether or not they need to be logged in / own the record
         return head(:no_content) if record.destroy
         
         render ::JsonResponse.validation_error(record)
