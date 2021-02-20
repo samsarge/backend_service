@@ -1,5 +1,8 @@
 module Multitenanted
   class Record < ApplicationRecord
+    # https://api.rubyonrails.org/classes/ActiveModel/Serialization.html
+    include ActiveModel::Serialization::JSON
+
     belongs_to :table,
                class_name: 'Multitenanted::Table',
                foreign_key: :multitenanted_table_id,
