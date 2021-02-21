@@ -7,9 +7,14 @@ class Backend < ApplicationRecord
   belongs_to :user
 
   SUBDOMAIN_REGEX = /\A[a-zA-Z0-9\-]+\z/.freeze
+  RESERVED_SUBDOMAINS = ['www', 'api', 'test', 'subdomain'].freeze
 
   after_create :create_schema_tenant!
   after_destroy :drop_schema_tenant!
+
+  validates :name, presence: true
+
+  validate :subdomain_isnt_reserved
 
   # Subdomain is used for tenant names
   validates :subdomain,
@@ -18,6 +23,12 @@ class Backend < ApplicationRecord
             format: { with: SUBDOMAIN_REGEX }
 
   private
+
+  def subdomain_isnt_reserved
+    return unless subdomain.downcase.in? RESERVED_SUBDOMAINS
+
+    errors.add(:subdomain, "#{subdomain} is a reserved subdomain")
+  end
 
   def create_schema_tenant!
     Apartment::Tenant.create(subdomain)
