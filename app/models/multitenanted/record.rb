@@ -25,7 +25,7 @@ module Multitenanted
     end
 
     def values_match_the_structure_of_the_table
-      structure_columns = table.structure['columns']
+      structure_columns = table.structure['columns'].map { |col_hash| col_hash['name'] }
       keys_mismatching_structure = values.keys - structure_columns
 
       return unless keys_mismatching_structure.any?

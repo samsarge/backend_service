@@ -30,6 +30,7 @@ gem 'devise'
 gem 'devise-jwt'
 gem 'rack-cors'
 
+# multitenancy
 gem 'apartment', github: 'influitive/apartment', branch: 'development'
 
 gem 'redis'
@@ -37,7 +38,11 @@ gem 'redis-namespace'
 
 gem 'sidekiq'
 
+# pagination
 gem 'kaminari'
+# param validation for custom data types n that
+gem 'rails_param'
+
 
 group :development, :test do
   gem 'pry-byebug'
