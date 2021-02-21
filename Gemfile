@@ -37,6 +37,8 @@ gem 'redis-namespace'
 
 gem 'sidekiq'
 
+gem 'kaminari'
+
 group :development, :test do
   gem 'pry-byebug'
   gem 'rspec-rails', '~> 4.0.1'

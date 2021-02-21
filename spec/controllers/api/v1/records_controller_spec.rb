@@ -54,6 +54,17 @@ RSpec.describe Api::V1::RecordsController, type: :request do
         expect(response.status).to eq 201
         expect(response.body).to include('bestrubydev@test.com')
       end
+
+      context 'the table name in the params doesn\'t exist' do
+        # params should be formatted table_name: { values }
+        # without table_name it should be bad request
+        let(:params) { { name: 'Test', email: 'badrequest@test.com', phone: '07777777777' } }
+
+        it 'should return bad request' do
+          request
+          expect(response.status).to eq 400
+        end
+      end
     end
 
     describe 'GET #index' do
@@ -71,7 +82,29 @@ RSpec.describe Api::V1::RecordsController, type: :request do
         expect(JSON.parse(response.body).count).to eq 2
       end
 
-      xit 'paginates properly' do; end
+      describe 'pagination' do
+        before do
+          50.times do |n|
+            create :multitenanted_record,
+                   multitenanted_table_id: Multitenanted::Table.find_by(name: 'contacts').id,
+                   values: { name: "Pagination #{n}", email: "#{n}@pagination.com", phone: '07' + (n.to_s * 9)}
+          end
+        end
+
+        context "With a default of #{Kaminari.config.default_per_page} records per page" do
+          it "should return max #{Kaminari.config.default_per_page} records per page by default" do
+            get '/api/v1/contacts?page=1'
+            expect(JSON.parse(response.body).count).to eq Kaminari.config.default_per_page
+          end
+
+          describe 'the page and per query strings' do
+            it 'should overwrite the amount of records returned for each page' do
+              get '/api/v1/contacts?page=1&per_page=10'
+              expect(JSON.parse(response.body).count).to eq 10
+            end
+          end
+        end
+      end
     end
 
     describe 'GET #show' do

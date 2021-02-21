@@ -19,6 +19,9 @@ module Api
 
       def index
         records = table.records
+        records = records.page(params[:page]) if params[:page].present?
+        records = records.per(params[:per_page]) if params[:per_page].present?
+
         render json: records.map(&:as_hash_for_json)
       end
 
@@ -62,7 +65,8 @@ module Api
       private
 
       def check_custom_bad_request
-        raise ArgumentError if invalid_columns_present_in_params?
+        # the model name should lead the values; { table_name_singular: { value1: value1 } }
+        raise ArgumentError if params[model].nil? || invalid_columns_present_in_params?
       end
 
       def invalid_columns_present_in_params?

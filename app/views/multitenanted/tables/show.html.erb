@@ -10,6 +10,16 @@
   <%= @multitenanted_table.structure %>
 </p>
 
+<p>
+  <strong>Pagination:</strong>
+  <li>Pagination for indexes has a default <%= Kaminari.config.default_per_page %> records per page. You </li>
+  <li>You can select a page with the <code>page</code> query string</li>
+  <li>You can overwrite the amount of records per page with a <code>per_page</code> query string. This requires the page query parameter to be present</li>
+  Example:
+  <code><%= "#{@multitenanted_table.api_endpoints[:Index]}?page=2&per_page=10"%></code>
+  Will select records 20-30.
+</p>
+
 API Endpoints:
 
 <table style="width:100%">

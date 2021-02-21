@@ -23,7 +23,7 @@ module Multitenanted
         Show:    "GET #{base}/api/v1/#{name.pluralize}/#{id}",
         Create:  "POST #{base}/api/v1/#{name.pluralize}",
         Update:  "PATCH #{base}/api/v1/#{name.pluralize}/#{id}",
-        Update:  "PUT #{base}/api/v1/#{name.pluralize}/#{id}",
+        'Update' =>  "PUT #{base}/api/v1/#{name.pluralize}/#{id}", # this is a cheat cause 2 symbols the same name overwrite eachother
         Destroy: "DELETE #{base}/api/v1/#{name.pluralize}/#{id}"
       }
     end
