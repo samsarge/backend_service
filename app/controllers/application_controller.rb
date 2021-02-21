@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   # API stuff
   # 200 success
   # 201 created
+  # 204 no content success - for deleting, a success when you dont return anythign back
   # 300x redirect
   # 400 bad request - sent the request wrong, wrong body etc
   # 404 not found

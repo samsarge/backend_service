@@ -118,5 +118,26 @@ RSpec.describe Api::V1::RecordsController, type: :request do
         end
       end
     end
+
+    describe 'DELETE #destroy' do
+      let(:record) { Multitenanted::Record.last }
+      let(:request) { delete url }
+
+      context 'an existing record' do
+        let(:url) { "/api/v1/contacts/#{record.id}" }
+        it 'should delete the record' do
+          expect { request }.to change { Multitenanted::Record.count }.by(-1)
+          expect(response.status).to eq 204
+        end
+      end
+
+      context 'a record that doesn\'t exist' do
+        let(:url) { '/api/v1/contacts/999' }
+        it 'should 404 because it can\'t find the record' do
+          expect { request }.to change { Multitenanted::Record.count }.by(0)
+          expect(response.status).to eq 404
+        end
+      end
+    end
   end
 end
