@@ -24,16 +24,20 @@ Apartment.configure do |config|
 
   EXCLUDED_MODELS = %w( Backend User ).freeze
 
-  non_multitenanted_models = ApplicationRecord.descendants.map(&:to_s).reject do |model_name|
-    model_name.start_with? 'Multitenanted::'
-  end
+  # TODO: Replace this with a method that reads the files inside the folder instead of
+  # checking AR, because rails hates us loading ApplicationRecord in the initilization and
+  # is depracting the ability to do it
 
-  if (non_multitenanted_models - EXCLUDED_MODELS).any?
-    raise(
-      'Not all the correct models are excluded in apartment.' \
-      ' Exclude all models which are not under the Multitenanted namespace before carrying on.'
-    )
-  end
+  # non_multitenanted_models = ApplicationRecord.descendants.map(&:to_s).reject do |model_name|
+  #   model_name.start_with? 'Multitenanted::'
+  # end
+
+  # if (non_multitenanted_models - EXCLUDED_MODELS).any?
+  #   raise(
+  #     'Not all the correct models are excluded in apartment.' \
+  #     ' Exclude all models which are not under the Multitenanted namespace before carrying on.'
+  #   )
+  # end
 
   config.excluded_models = EXCLUDED_MODELS
 
