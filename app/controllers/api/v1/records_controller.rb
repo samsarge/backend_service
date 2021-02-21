@@ -2,16 +2,20 @@ module Api
   module V1
     # Multitenanted records
     class RecordsController < ApplicationController
-      skip_before_action :verify_authenticity_token # cause api, but should cors probably later
+      # cause api, security handled through cors
+      skip_before_action :verify_authenticity_token
 
-      # rescue_from ArgumentError,
                   # when we add rails params in
                   # RailsParam::Param::InvalidParameterError,
-                  # with: :bad_request
+      rescue_from ActionController::ParameterMissing,
+                  ArgumentError,
+                  with: :bad_request
 
       rescue_from ActiveRecord::RecordNotFound,
                   ActionController::RoutingError,
                   with: :not_found
+
+      before_action :check_custom_bad_request, only: [:create, :update]
 
       def index
         records = table.records
@@ -26,6 +30,8 @@ module Api
       end
 
       def create
+        return bad_request if invalid_columns_present_in_params?
+
         record = table.records.new(values: dynamic_record_params)
         if record.save
           # TODO: Add records serializer
@@ -36,7 +42,10 @@ module Api
       end
 
       def update
+        return bad_request if invalid_columns_present_in_params?
+
         record = table.records.find(params[:id])
+
         if record.update(values: dynamic_record_params)
           # TODO: Add records serializer
           render json: record, status: :ok
@@ -50,15 +59,26 @@ module Api
         # Will add in a permissions system for users to manage what people can do
         # with all API endpoints and whether or not they need to be logged in / own the record
         return head(:no_content) if record.destroy
-        
+
         render json: record.errors, status: :unprocessable_entity
       end
 
       private
 
+      def check_custom_bad_request
+        raise ArgumentError if invalid_columns_present_in_params?
+      end
+
+      def invalid_columns_present_in_params?
+        (params[model].keys - dynamic_record_params.keys).any?
+      end
+
       def dynamic_record_params
-        model = table.name.singularize
         params.require(model).permit(*table.structure["columns"])
+      end
+
+      def model
+        @model ||= table.name.singularize
       end
 
       def backend

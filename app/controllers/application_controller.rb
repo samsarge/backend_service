@@ -9,8 +9,9 @@ class ApplicationController < ActionController::Base
   # 200 success
   # 201 created
   # 300x redirect
+  # 400 bad request - sent the request wrong, wrong body etc
   # 404 not found
-  # 422 unprocessible entity - failed a validation
+  # 422 unprocessible entity - record failed a validation
   # 500 internal error
 
   def bad_request(e)
@@ -18,8 +19,6 @@ class ApplicationController < ActionController::Base
 
     err_message = e.message
     err_message += " (#{e.param})" if e.respond_to?(:param)
-    logger.error "#{e.class}, #{err_message}"
-    logger.error e.backtrace.join "\n"
     render json: { error: err_message }, status: :bad_request
   end
 

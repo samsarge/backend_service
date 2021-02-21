@@ -8,9 +8,13 @@ RSpec.describe Api::V1::RecordsController, type: :request do
   before do
     Apartment::Tenant.switch(api.subdomain) do
       Multitenanted::User.create(email: 'normal_user@test.com', password: 'Test123!')
-      create :multitenanted_table,
-             name: 'contacts',
-             structure: { columns: %w[name email phone] }
+      table = create :multitenanted_table,
+                     name: 'contacts',
+                     structure: { columns: %w[name email phone] }
+
+       create :multitenanted_record,
+              multitenanted_table_id: table.id,
+              values: { name: 'Tester', email: 'existing@record.com', phone: '077777777777' }
     end
 
     host!("#{api.subdomain}.lvh.me")
@@ -53,14 +57,6 @@ RSpec.describe Api::V1::RecordsController, type: :request do
     end
 
     describe 'GET #show' do
-
-      before do
-        Apartment::Tenant.switch!(api.subdomain)
-        create :multitenanted_record,
-               multitenanted_table_id: Multitenanted::Table.find_by(name: 'contacts').id,
-               values: { name: 'Tester', email: 'existing@record.com', phone: '077777777777' }
-      end
-
       let(:id) { Multitenanted::Record.last.id }
       let(:url) { "/api/v1/contacts/#{id}" }
       let(:request) { get url }
@@ -78,6 +74,29 @@ RSpec.describe Api::V1::RecordsController, type: :request do
         let(:id) { 9999999 }
         it 'should return a not found error' do
           expect(response.status).to eq 404
+        end
+      end
+    end
+
+    describe 'PUT #update' do
+      let(:record) { Multitenanted::Record.last }
+      let(:url) { "/api/v1/contacts/#{record.id}" }
+      let(:request) { patch url, params: params }
+
+      context 'valid params' do
+        let(:params) { { contact: { name: 'updated name' } } }
+        it 'should update the record with new values' do
+          expect { request }.to change { record.reload.values['name'] }.from('Tester').to('updated name')
+          expect(response.body).to include('updated name')
+          expect(response.status).to eq 200
+        end
+      end
+
+      context 'invalid params' do
+        let(:params) { { contact: { invalid_column: 'updated name' } } }
+        it 'should return bad request' do
+          request
+          expect(response.status).to eq 400 # bad request, you sent the wrong shit
         end
       end
     end
