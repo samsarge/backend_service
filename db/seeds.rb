@@ -5,3 +5,15 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+User.create!(email: 'test@test.com', password: 'test@test.com')
+
+User.last.backends.create!(name: 'test app', subdomain: 'testapp')
+
+Apartment::Tenant.switch!(Backend.last.subdomain)
+
+Multitenanted::Table.create!(name: 'contacts', structure: { columns: ['name', 'email'] })
+
+Multitenanted::Table.last.records.create!(values: { name: 'contact1', email: 'contact1@email.com' })
+
+Apartment::Tenant.switch! # back to public schema
