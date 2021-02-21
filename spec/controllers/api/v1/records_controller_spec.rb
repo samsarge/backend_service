@@ -56,6 +56,24 @@ RSpec.describe Api::V1::RecordsController, type: :request do
       end
     end
 
+    describe 'GET #index' do
+      let(:url) { '/api/v1/contacts' }
+      let(:request) { get url }
+
+      before do
+        # create a 2nd record
+        create :multitenanted_record,
+               multitenanted_table_id: Multitenanted::Table.find_by(name: 'contacts').id,
+               values: { name: 'Tester 2', email: 'tester2@record.com', phone: '077777777778' }
+      end
+      it 'returns all of the records for this table' do
+        request
+        expect(JSON.parse(response.body).count).to eq 2
+      end
+
+      xit 'paginates properly' do; end
+    end
+
     describe 'GET #show' do
       let(:id) { Multitenanted::Record.last.id }
       let(:url) { "/api/v1/contacts/#{id}" }

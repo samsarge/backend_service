@@ -19,14 +19,12 @@ module Api
 
       def index
         records = table.records
-        # TODO: Add records serializer
-        render json: records
+        render json: records.map(&:as_hash_for_json)
       end
 
       def show
         record = table.records.find(params[:id])
-        # TODO: Add records serializer
-        render json: record
+        render json: record.as_hash_for_json
       end
 
       def create
@@ -34,8 +32,7 @@ module Api
 
         record = table.records.new(values: dynamic_record_params)
         if record.save
-          # TODO: Add records serializer
-          render json: record, status: :created
+          render json: record.as_hash_for_json, status: :created
         else
           render json: record.errors, status: :unprocessable_entity
         end
@@ -47,8 +44,7 @@ module Api
         record = table.records.find(params[:id])
 
         if record.update(values: dynamic_record_params)
-          # TODO: Add records serializer
-          render json: record, status: :ok
+          render json: record.as_hash_for_json, status: :ok
         else
           render json: record.errors, status: :unprocessable_entity
         end

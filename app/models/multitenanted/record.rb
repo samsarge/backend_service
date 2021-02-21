@@ -11,6 +11,12 @@ module Multitenanted
 
     validates :multitenanted_table_id, presence: true
 
+    def as_hash_for_json
+      # Serializers all work on the class level and we need to dynamically interpret the
+      # columns and fields on the instance level so for now we just use this
+      { table.name.singularize => { id: id }.merge(values) }
+    end
+
     private
 
     def underscore_values_field_keys!
