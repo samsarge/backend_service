@@ -8,11 +8,8 @@ RSpec.describe Api::V1::RecordsController, type: :request do
   before do
     Apartment::Tenant.switch(api.subdomain) do
       Multitenanted::User.create(email: 'normal_user@test.com', password: 'Test123!')
-      table = create :multitenanted_table,
-                     name: 'contacts',
-                     structure: { columns: %w[name email phone] }
-
-       create :multitenanted_record,
+      table = create :multitenanted_table
+      create :multitenanted_record,
               multitenanted_table_id: table.id,
               values: { name: 'Tester', email: 'existing@record.com', phone: '077777777777' }
     end
@@ -46,7 +43,6 @@ RSpec.describe Api::V1::RecordsController, type: :request do
           'email' => 'bestrubydev@test.com',
           'phone' => '077777777777'
         )
-
       end
 
       it 'should render the correct results back' do

@@ -6,13 +6,24 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+User.destroy_all
+
 User.create!(email: 'test@test.com', password: 'test@test.com')
 
 User.last.backends.create!(name: 'test app', subdomain: 'testapp')
 
 Apartment::Tenant.switch!(Backend.last.subdomain)
 
-Multitenanted::Table.create!(name: 'contacts', structure: { columns: ['name', 'email'] })
+
+Multitenanted::Table.create!(name: 'contacts',
+  structure: {
+    columns: [
+      { name: 'name', datatype: 'String' },
+      { name: 'email', datatype: 'String' },
+      { name: 'phone', datatype: 'String' }
+    ]
+  }
+)
 
 Multitenanted::Table.last.records.create!(values: { name: 'contact1', email: 'contact1@email.com' })
 

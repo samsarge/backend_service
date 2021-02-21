@@ -5,9 +5,8 @@ module Api
       # cause api, security handled through cors
       skip_before_action :verify_authenticity_token
 
-                  # when we add rails params in
-                  # RailsParam::Param::InvalidParameterError,
       rescue_from ActionController::ParameterMissing,
+                  RailsParam::Param::InvalidParameterError,
                   ArgumentError,
                   with: :bad_request
 
@@ -16,6 +15,7 @@ module Api
                   with: :not_found
 
       before_action :check_custom_bad_request, only: [:create, :update]
+      before_action :validate_params_match_custom_datatypes, only: [:create, :update]
 
       def index
         records = table.records
@@ -64,6 +64,15 @@ module Api
 
       private
 
+      def validate_params_match_custom_datatypes
+        # from rails_params gem
+        param!(model) do |m|
+          table.structure['columns'].each do |col_hash|
+            m.param!(col_hash['name'].to_sym, col_hash['datatype'].constanize, {})
+          end
+        end
+      end
+
       def check_custom_bad_request
         # the model name should lead the values; { table_name_singular: { value1: value1 } }
         raise ArgumentError if params[model].nil? || invalid_columns_present_in_params?
@@ -74,7 +83,8 @@ module Api
       end
 
       def dynamic_record_params
-        params.require(model).permit(*table.structure["columns"])
+        column_names = table.structure['columns'].map { |col_hash| col_hash['name'] }
+        params.require(model).permit(*column_names)
       end
 
       def model

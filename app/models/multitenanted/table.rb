@@ -14,6 +14,31 @@ module Multitenanted
     before_save :configure_table_name!
     before_save :underscore_column_names!
 
+    # Supported data types, based off rails_params gem
+
+    DATATYPES = [
+      'String',
+      'Integer',
+      'Float',
+      'Boolean',
+      'Array',
+      'Hash',
+      'Date',
+      'Time',
+      'DateTime',
+      'BigDecimal'
+    ].freeze
+
+    # Structure format
+    # {
+    #   'columns' => [
+    #     {
+    #       'name' => 'Name',
+    #       'datatype' => 'DataType'
+    #     }
+    #   ]
+    # }
+
     def api_endpoints
       # The backend subdomain + domain
       base = "#{Apartment::Tenant.current}.#{Rails.application.config.domain}"
@@ -42,7 +67,12 @@ module Multitenanted
       # see record model, we enforce underscoring
       return unless structure['columns']
 
-      structure['columns'].map!(&:underscore)
+      structure['columns'].map! do |col_hash|
+        {
+          'name' => col_hash['name'].underscore,
+          'datatype' => col_hash['datatype']
+        }
+      end
     end
 
     def configure_table_name! # Underscore and pluralize the table name
