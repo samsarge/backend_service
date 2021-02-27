@@ -34,6 +34,7 @@
       <% end %>
 
      <main class="vlc-container <%= user_signed_in? ? 'user_signed_in' : 'registration' %>">
+       <p id="notice"><%= notice %></p>
        <%= yield %>
      </main>
 

@@ -6,18 +6,29 @@ RSpec.describe Api::V1::RecordsController, type: :request do
   let!(:api) { create :backend, user_id: developer.id }
 
   before do
-    Apartment::Tenant.switch(api.subdomain) do
-      Multitenanted::User.create(email: 'normal_user@test.com', password: 'Test123!')
-      table = create :multitenanted_table,
-                     name: 'contacts',
-                     structure: { columns: %w[name email phone] }
+    Apartment::Tenant.switch!(api.subdomain)
 
-       create :multitenanted_record,
-              multitenanted_table_id: table.id,
-              values: { name: 'Tester', email: 'existing@record.com', phone: '077777777777' }
-    end
+    Multitenanted::User.create(email: 'normal_user@test.com', password: 'Test123!')
+
+    table = create :multitenanted_table,
+                   name: 'contacts',
+                   structure: { columns: %w[name email phone] }
+
+    create :multitenanted_record,
+           multitenanted_table_id: table.id,
+           values: { name: 'Tester', email: 'existing@record.com', phone: '077777777777' }
 
     host!("#{api.subdomain}.lvh.me")
+  end
+
+  shared_examples 'it handles permissions' do
+    context 'with no permissions' do
+      it 'should return forbidden' do
+        allow_any_instance_of(Multitenanted::Table).to receive(:permission_bitmask).and_return(0)
+        request
+        expect(response.status).to eq 403
+      end
+    end
   end
 
   # The url is created and resolved dynamically based on table names
@@ -46,7 +57,6 @@ RSpec.describe Api::V1::RecordsController, type: :request do
           'email' => 'bestrubydev@test.com',
           'phone' => '077777777777'
         )
-
       end
 
       it 'should render the correct results back' do
@@ -65,6 +75,8 @@ RSpec.describe Api::V1::RecordsController, type: :request do
           expect(response.status).to eq 400
         end
       end
+
+      it_behaves_like('it handles permissions')
     end
 
     describe 'GET #index' do
@@ -77,6 +89,7 @@ RSpec.describe Api::V1::RecordsController, type: :request do
                multitenanted_table_id: Multitenanted::Table.find_by(name: 'contacts').id,
                values: { name: 'Tester 2', email: 'tester2@record.com', phone: '077777777778' }
       end
+
       it 'returns all of the records for this table' do
         request
         expect(JSON.parse(response.body).count).to eq 2
@@ -105,6 +118,8 @@ RSpec.describe Api::V1::RecordsController, type: :request do
           end
         end
       end
+
+      it_behaves_like('it handles permissions')
     end
 
     describe 'GET #show' do
@@ -112,10 +127,9 @@ RSpec.describe Api::V1::RecordsController, type: :request do
       let(:url) { "/api/v1/contacts/#{id}" }
       let(:request) { get url }
 
-      before { request }
-
       context 'with a records id' do
         it 'should return the specific record' do
+          request
           expect(response.status).to eq 200
           expect(response.body).to include('Tester', 'existing@record.com', '077777777777')
         end
@@ -124,18 +138,21 @@ RSpec.describe Api::V1::RecordsController, type: :request do
       context 'a non existant ID' do
         let(:id) { 9999999 }
         it 'should return a not found error' do
+          request
           expect(response.status).to eq 404
         end
       end
+
+      it_behaves_like('it handles permissions')
     end
 
     describe 'PUT #update' do
       let(:record) { Multitenanted::Record.last }
       let(:url) { "/api/v1/contacts/#{record.id}" }
+      let(:params) { { contact: { name: 'updated name' } } }
       let(:request) { patch url, params: params }
 
       context 'valid params' do
-        let(:params) { { contact: { name: 'updated name' } } }
         it 'should update the record with new values' do
           expect { request }.to change { record.reload.values['name'] }.from('Tester').to('updated name')
           expect(response.body).to include('updated name')
@@ -150,14 +167,16 @@ RSpec.describe Api::V1::RecordsController, type: :request do
           expect(response.status).to eq 400 # bad request, you sent the wrong shit
         end
       end
+
+      it_behaves_like('it handles permissions')
     end
 
     describe 'DELETE #destroy' do
       let(:record) { Multitenanted::Record.last }
+      let(:url) { "/api/v1/contacts/#{record.id}" }
       let(:request) { delete url }
 
       context 'an existing record' do
-        let(:url) { "/api/v1/contacts/#{record.id}" }
         it 'should delete the record' do
           expect { request }.to change { Multitenanted::Record.count }.by(-1)
           expect(response.status).to eq 204
@@ -171,6 +190,8 @@ RSpec.describe Api::V1::RecordsController, type: :request do
           expect(response.status).to eq 404
         end
       end
+
+      it_behaves_like('it handles permissions')
     end
   end
 end

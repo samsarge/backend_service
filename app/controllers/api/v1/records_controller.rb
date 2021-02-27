@@ -15,7 +15,11 @@ module Api
                   ActionController::RoutingError,
                   with: :not_found
 
+      rescue_from ForbiddenError,
+                  with: :forbidden
+
       before_action :check_custom_bad_request, only: [:create, :update]
+      before_action :check_permissions
 
       def index
         records = table.records
@@ -63,6 +67,18 @@ module Api
       end
 
       private
+
+      ACTION_PERMISSIONS = { index: :read,
+                             show: :read,
+                             create: :create,
+                             update: :update,
+                             destroy: :delete }.freeze
+
+      def check_permissions
+        perform_action = ACTION_PERMISSIONS[params[:action].to_sym]
+
+        raise ForbiddenError unless table.can? perform_action
+      end
 
       def check_custom_bad_request
         # the model name should lead the values; { table_name_singular: { value1: value1 } }

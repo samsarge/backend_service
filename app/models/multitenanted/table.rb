@@ -1,6 +1,8 @@
 module Multitenanted
   # Multitenanted table object that people use to store data in their backends
   class Table < ApplicationRecord
+    include Permissionable
+
     has_many :records,
              class_name: 'Multitenanted::Record',
              inverse_of: :table,
@@ -13,20 +15,6 @@ module Multitenanted
 
     before_save :configure_table_name!
     before_save :underscore_column_names!
-
-    def api_endpoints
-      # The backend subdomain + domain
-      base = "#{Apartment::Tenant.current}.#{Rails.application.config.domain}"
-
-      {
-        Index:   "GET #{base}/api/v1/#{name.pluralize}",
-        Show:    "GET #{base}/api/v1/#{name.pluralize}/#{id}",
-        Create:  "POST #{base}/api/v1/#{name.pluralize}",
-        Update:  "PATCH #{base}/api/v1/#{name.pluralize}/#{id}",
-        'Update' =>  "PUT #{base}/api/v1/#{name.pluralize}/#{id}", # this is a cheat cause 2 symbols the same name overwrite eachother
-        Destroy: "DELETE #{base}/api/v1/#{name.pluralize}/#{id}"
-      }
-    end
 
     def json_example
       {

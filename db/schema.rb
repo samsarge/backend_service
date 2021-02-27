@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_14_192225) do
+ActiveRecord::Schema.define(version: 2021_02_27_172902) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 2020_06_14_192225) do
     t.jsonb "structure", default: {"columns"=>[]}
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "permission_bitmask", default: 15
   end
 
   create_table "multitenanted_users", force: :cascade do |t|
