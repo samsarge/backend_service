@@ -25,4 +25,16 @@ RSpec.describe Backend, type: :model do
       end
     end
   end
+
+  describe 'Hooks' do
+    it 'should create a configuration  when it is created' do
+      expect {
+        developer.backends.create(name: 'Config test', subdomain: 'configtest')
+      }.to change {
+        Configuration.count
+      }.by(1)
+
+      expect(Configuration.last.backend_id).to eq Backend.last.id
+    end
+  end
 end

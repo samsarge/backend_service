@@ -69,7 +69,7 @@ module Api
       private
 
       def check_permissions
-        PermissionChecker.new(backend).perform_table_actions(table: table, action: params[:action])
+        PermissionChecker.new(backend).table_record_actions(table: table, action: params[:action])
       end
 
       def check_custom_bad_request

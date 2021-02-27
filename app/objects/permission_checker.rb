@@ -14,14 +14,25 @@
 class PermissionChecker
   def initialize(backend)
     @backend = backend
+    @configuration = @backend.configuration
   end
 
+  def user_registration_actions
+    raise NoPermissionError unless @configuration.user_registrations_enabled?
+  end
 
-  def perform_table_actions(table:, action:)
+  def user_session_actions
+    raise NoPermissionError unless @configuration.user_sessions_enabled?
+  end
+
+  def table_record_actions(table:, action:)
     permission_to_check = CONTROLLER_ACTION_TO_PERMISSION[action.to_sym]
-    return if table.permission_bitmask & TABLE_PERMISSION_BITMASK[permission_to_check] > 0
 
-    raise NoPermissionError
+    unless @configuration.custom_data_enabled? &&
+      (table.permission_bitmask & TABLE_PERMISSION_BITMASK[permission_to_check] > 0)
+
+      raise NoPermissionError
+    end
   end
 
   private

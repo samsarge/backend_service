@@ -6,9 +6,12 @@
 class Backend < ApplicationRecord
   belongs_to :user
 
+  has_one :configuration, dependent: :destroy
+
   SUBDOMAIN_REGEX = /\A[a-zA-Z0-9\-]+\z/.freeze
   RESERVED_SUBDOMAINS = ['www', 'api', 'test', 'subdomain'].freeze
 
+  after_create :create_default_configuration!
   after_create :create_schema_tenant!
   after_destroy :drop_schema_tenant!
 
@@ -23,6 +26,11 @@ class Backend < ApplicationRecord
             format: { with: SUBDOMAIN_REGEX }
 
   private
+
+  # Until we make it a required nested attribute as part of a UX overhaul
+  def create_default_configuration!
+    Configuration.create(backend: self)
+  end
 
   def subdomain_isnt_reserved
     return unless subdomain.downcase.in? RESERVED_SUBDOMAINS

@@ -14,6 +14,7 @@
 </p>
 
 <%= link_to 'Edit', edit_backend_path(@backend) %> |
+<%= link_to 'Configuration', edit_backend_configuration_path(backend_id: @backend.id) %> |
 <%= link_to 'New Table', new_backend_multitenanted_table_path(backend_id: @backend.id) %> |
 <%= link_to 'Users', backend_multitenanted_users_path(backend_id: @backend.id) %> |
 <%= link_to 'Back', backends_path %>

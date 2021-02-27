@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_27_172902) do
+ActiveRecord::Schema.define(version: 2021_02_27_195804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,16 @@ ActiveRecord::Schema.define(version: 2021_02_27_172902) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_backends_on_user_id"
+  end
+
+  create_table "configurations", force: :cascade do |t|
+    t.boolean "user_sessions_enabled", default: true
+    t.boolean "user_registrations_enabled", default: true
+    t.boolean "custom_data_enabled", default: true
+    t.bigint "backend_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["backend_id"], name: "index_configurations_on_backend_id"
   end
 
   create_table "multitenanted_records", force: :cascade do |t|
@@ -75,5 +85,6 @@ ActiveRecord::Schema.define(version: 2021_02_27_172902) do
   end
 
   add_foreign_key "backends", "users"
+  add_foreign_key "configurations", "backends"
   add_foreign_key "multitenanted_records", "multitenanted_tables"
 end

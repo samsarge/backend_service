@@ -1,0 +1,30 @@
+<h1><%= @backend.name %> configuration</h1>
+
+
+<%= form_with(model: @configuration,
+              local: true,
+              url: backend_configuration_path(backend_id: @backend.id),
+              html: {class: 'space-y-4 w-full md:space-y-8 md:w-2/3'}) do |f| %>
+
+  <div>
+    <p> Enable the API endpoints for user sessions, allowing users to log in to your application </p>
+    <%= f.check_box :user_sessions_enabled %>
+    <%= f.label :user_sessions_enabled %>
+  </div>
+
+  <div>
+    <p> Enable the API endpoints for user registrations, allowing users to register to your application </p>
+    <%= f.check_box :user_registrations_enabled %>
+    <%= f.label :user_registrations_enabled %>
+  </div>
+
+  <div>
+    <p> Enable your custom data features including your ability to create tables and use their API endpoints </p>
+    <%= f.check_box :custom_data_enabled %>
+    <%= f.label :custom_data_enabled %>
+  </div>
+
+  <%= f.submit class: 'vlc-button primary' %>
+<% end %>
+
+<%= link_to 'Back', backend_path(@backend) %>

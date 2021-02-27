@@ -31,6 +31,16 @@ RSpec.describe Api::V1::RecordsController, type: :request do
     end
   end
 
+  shared_examples 'it handles disabling the feature' do
+    context 'with the feature disabled' do
+      it 'should return forbidden' do
+        api.configuration.update(custom_data_enabled: false)
+        request
+        expect(response.status).to eq 403
+      end
+    end
+  end
+
   # The url is created and resolved dynamically based on table names
   # so if you have a table called conctacts then the routes for /api/v1/contacts will work
   context 'not logged in as a tenant user, just calling the api' do
@@ -77,6 +87,7 @@ RSpec.describe Api::V1::RecordsController, type: :request do
       end
 
       it_behaves_like('it handles permissions')
+      it_behaves_like('it handles disabling the feature')
     end
 
     describe 'GET #index' do
@@ -120,6 +131,7 @@ RSpec.describe Api::V1::RecordsController, type: :request do
       end
 
       it_behaves_like('it handles permissions')
+      it_behaves_like('it handles disabling the feature')
     end
 
     describe 'GET #show' do
@@ -144,6 +156,7 @@ RSpec.describe Api::V1::RecordsController, type: :request do
       end
 
       it_behaves_like('it handles permissions')
+      it_behaves_like('it handles disabling the feature')
     end
 
     describe 'PUT #update' do
@@ -169,6 +182,7 @@ RSpec.describe Api::V1::RecordsController, type: :request do
       end
 
       it_behaves_like('it handles permissions')
+      it_behaves_like('it handles disabling the feature')
     end
 
     describe 'DELETE #destroy' do
@@ -192,6 +206,7 @@ RSpec.describe Api::V1::RecordsController, type: :request do
       end
 
       it_behaves_like('it handles permissions')
+      it_behaves_like('it handles disabling the feature')
     end
   end
 end
