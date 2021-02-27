@@ -22,18 +22,32 @@ RSpec.describe Api::V1::RegistrationsController, type: :request do
   end
 
   context 'creating a new user account' do
+    let(:request) { post api_v1_user_registration_path, params: params }
+
     before do
-      post api_v1_user_registration_path, params: params
       Apartment::Tenant.switch!(api.subdomain)
     end
 
     context 'when user is unauthenticated' do
+      before { request }
+
       it 'returns 200' do
         expect(response.status).to eq 200
       end
 
       it 'returns a new user' do
         expect(response.body).to eq(Multitenanted::User.last.to_json)
+      end
+    end
+
+    context 'with the feature turned off' do
+      before do
+        api.configuration.update(user_registrations_enabled: false)
+      end
+
+      it 'should forbid' do
+        request
+        expect(response.status).to eq 403
       end
     end
 
@@ -47,15 +61,16 @@ RSpec.describe Api::V1::RegistrationsController, type: :request do
         }
       end
 
+      before { request }
+
       it 'returns bad request status' do
         expect(response.status).to eq 422
       end
 
       it 'returns validation errors' do
-        errors = JSON.parse(response.body)['errors']
-
-        expect(errors.first['title']).to eq 'Unprocessable Entity'
-        expect(errors.first['detail']).to eq('email' => ['has already been taken'])
+        errors = JSON.parse(response.body)
+        expect(response.status).to eq 422
+        expect(errors['email']).to eq(['has already been taken'])
       end
     end
   end

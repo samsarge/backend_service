@@ -22,7 +22,7 @@ Apartment.configure do |config|
   # This relies on all the models being loaded though which they literally never are
   # without forcing eager loading and doing that just slows down dev sooo
 
-  EXCLUDED_MODELS = %w( Backend User ).freeze
+  EXCLUDED_MODELS = %w( Backend Configuration User ).freeze
 
   # TODO: Replace this with a method that reads the files inside the folder instead of
   # checking AR, because rails hates us loading ApplicationRecord in the initilization and

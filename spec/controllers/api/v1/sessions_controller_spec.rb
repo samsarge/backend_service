@@ -23,6 +23,17 @@ RSpec.describe Api::V1::SessionsController, type: :request do
       }
     end
 
+    context 'with the feature turned off' do
+      before do
+        api.configuration.update(user_sessions_enabled: false)
+      end
+
+      it 'should forbid' do
+        post url, params: params
+        expect(response.status).to eq 403
+      end
+    end
+
     context 'when params are correct' do
       before do
         post url, params: params

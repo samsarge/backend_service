@@ -15,7 +15,11 @@ module Api
                   ActionController::RoutingError,
                   with: :not_found
 
+      rescue_from NoPermissionError,
+                  with: :forbidden
+
       before_action :check_custom_bad_request, only: [:create, :update]
+      before_action :check_permissions
 
       def index
         records = table.records
@@ -63,6 +67,10 @@ module Api
       end
 
       private
+
+      def check_permissions
+        PermissionChecker.new(backend).table_record_actions(table: table, action: params[:action])
+      end
 
       def check_custom_bad_request
         # the model name should lead the values; { table_name_singular: { value1: value1 } }

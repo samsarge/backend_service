@@ -32,6 +32,11 @@
     <%= form.text_field :structure %>
   </div>
 
+  <p>Enable or disable the Create Read Update Delete API endpoints</p>
+  <div class="vlc-input">
+    <%= form.label :allowed_crud_actions %>
+    <%= form.number_field :permission_bitmask %>
+  </div>
 
   <%= form.submit class: 'vlc-button primary' %>
 <% end %>

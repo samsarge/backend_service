@@ -11,22 +11,15 @@ module Multitenanted
 
     validates :name, uniqueness: { presence: true }
 
+    validates :permission_bitmask,
+          numericality: {
+            only_integer: true,
+            greater_than_or_equal_to: 0,
+            less_than_or_equal_to: 15
+          }
+
     before_save :configure_table_name!
     before_save :underscore_column_names!
-
-    def api_endpoints
-      # The backend subdomain + domain
-      base = "#{Apartment::Tenant.current}.#{Rails.application.config.domain}"
-
-      {
-        Index:   "GET #{base}/api/v1/#{name.pluralize}",
-        Show:    "GET #{base}/api/v1/#{name.pluralize}/#{id}",
-        Create:  "POST #{base}/api/v1/#{name.pluralize}",
-        Update:  "PATCH #{base}/api/v1/#{name.pluralize}/#{id}",
-        'Update' =>  "PUT #{base}/api/v1/#{name.pluralize}/#{id}", # this is a cheat cause 2 symbols the same name overwrite eachother
-        Destroy: "DELETE #{base}/api/v1/#{name.pluralize}/#{id}"
-      }
-    end
 
     def json_example
       {

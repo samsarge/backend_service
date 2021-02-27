@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   # 204 no content success - for deleting, a success when you dont return anythign back
   # 300x redirect
   # 400 bad request - sent the request wrong, wrong body etc
+  # 403 forbidden - denied access via permissions
   # 404 not found
   # 422 unprocessible entity - record failed a validation
   # 500 internal error
@@ -25,5 +26,9 @@ class ApplicationController < ActionController::Base
 
   def not_found
     head :not_found
+  end
+
+  def forbidden
+    head :forbidden
   end
 end

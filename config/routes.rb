@@ -22,6 +22,8 @@ Rails.application.routes.draw do
     authenticated :user do
       root 'backends#index', as: :authenticated_root
       resources :backends do
+
+        resource :configuration, only: [:edit, :update] # singular resource
         # This isn't a has many but they are created in the schema belonging to the backend so
         # nest regardless
         namespace :multitenanted do
@@ -32,7 +34,6 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :settings, only: :index
 
       namespace :billing do
         resources :plans, only: :index

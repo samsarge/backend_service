@@ -1,0 +1,61 @@
+<% base = "#{Apartment::Tenant.current}.#{Rails.application.config.domain}" %>
+
+<table style="width:100%">
+  <tr>
+    <th><strong>Permission Required</strong></th>
+    <th><strong>Enabled</strong></th>
+    <th><strong>HTTP Method</strong></th>
+    <th><strong>URL</strong></th>
+    <th><strong>Description</strong></th>
+  </tr>
+
+  <tr>
+    <td style="text-align:center;">CREATE</td>
+    <td style="text-align:center;"><%= table.can?(:create) %></td>
+    <td style="text-align:center;">POST</td>
+    <td style="text-align:center;"><%= "#{base}/api/v1/#{table.name.pluralize}" %></td>
+    <td style="" class='pl-5'>
+        Create a <%= table.name %> record. A body is required for this request, see below for a JSON example.
+    </td>
+  </tr>
+
+  <tr>
+    <td style="text-align:center;">READ</td>
+    <td style="text-align:center;"><%= table.can?(:read) %></td>
+    <td style="text-align:center;">GET</td>
+    <td style="text-align:center;"><%= "#{base}/api/v1/#{table.name.pluralize}"%></td>
+    <td style="" class='pl-5'>  
+      Read multiple <%= table.name %> records, paginate via <code>page</code> and <code>per</code> query strings
+    </td>
+  </tr>
+
+  <tr>
+    <td style="text-align:center;">READ</td>
+    <td style="text-align:center;"><%= table.can?(:read) %></td>
+    <td style="text-align:center;">GET</td>
+    <td style="text-align:center;"><%= "#{base}/api/v1/#{table.name.pluralize}/:id" %></td>
+    <td style="" class='pl-5'>
+      See details for individual records, identified by it's ID.
+    </td>
+  </tr>
+
+  <tr>
+    <td style="text-align:center;">UPDATE</td>
+    <td style="text-align:center;"><%= table.can?(:update) %></td>
+    <td style="text-align:center;">PATCH / PUT</td>
+    <td style="text-align:center;"><%= "#{base}/api/v1/#{table.name.pluralize}/:id" %></td>
+    <td style="" class='pl-5'>
+      Update an individual record, identified by it's ID. A body is required for this request, see below for JSON example.
+    </td>
+  </tr>
+
+  <tr>
+    <td style="text-align:center;">DELETE</td>
+    <td style="text-align:center;"><%= table.can?(:delete) %></td>
+    <td style="text-align:center;">DELETE</td>
+    <td style="text-align:center;"><%= "#{base}/api/v1/#{table.name.pluralize}/:id" %></td>
+    <td style="" class='pl-5'>
+      Delete an individual record, identified by it's ID
+    </td>
+  </tr>
+</table>
