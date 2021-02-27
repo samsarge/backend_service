@@ -21,7 +21,7 @@ class BackendsController < ApplicationController
   def create
     @backend = current_user.backends.new(backend_params)
 
-    return render :new if @backend.save
+    return render :new unless @backend.save
 
     redirect_to @backend, notice: 'Backend was successfully created.'
   end
