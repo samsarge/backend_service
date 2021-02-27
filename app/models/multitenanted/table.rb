@@ -1,8 +1,6 @@
 module Multitenanted
   # Multitenanted table object that people use to store data in their backends
   class Table < ApplicationRecord
-    include Permissionable
-
     has_many :records,
              class_name: 'Multitenanted::Record',
              inverse_of: :table,
@@ -12,6 +10,13 @@ module Multitenanted
     validates_with StructureValidator
 
     validates :name, uniqueness: { presence: true }
+
+    validates :permission_bitmask,
+          numericality: {
+            only_integer: true,
+            greater_than_or_equal_to: 0,
+            less_than_or_equal_to: 15
+          }
 
     before_save :configure_table_name!
     before_save :underscore_column_names!

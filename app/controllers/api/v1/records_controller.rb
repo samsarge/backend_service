@@ -15,7 +15,7 @@ module Api
                   ActionController::RoutingError,
                   with: :not_found
 
-      rescue_from ForbiddenError,
+      rescue_from NoPermissionError,
                   with: :forbidden
 
       before_action :check_custom_bad_request, only: [:create, :update]
@@ -68,16 +68,8 @@ module Api
 
       private
 
-      ACTION_PERMISSIONS = { index: :read,
-                             show: :read,
-                             create: :create,
-                             update: :update,
-                             destroy: :delete }.freeze
-
       def check_permissions
-        perform_action = ACTION_PERMISSIONS[params[:action].to_sym]
-
-        raise ForbiddenError unless table.can? perform_action
+        PermissionChecker.new(backend).perform_table_actions(table: table, action: params[:action])
       end
 
       def check_custom_bad_request

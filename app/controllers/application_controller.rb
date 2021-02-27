@@ -1,7 +1,4 @@
 class ApplicationController < ActionController::Base
-
-  class ForbiddenError < StandardError; end
-
   protected
 
   def parsed_json_input(json_input)
