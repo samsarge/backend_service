@@ -28,11 +28,7 @@ class PermissionChecker
   def table_record_actions(table:, action:)
     permission_to_check = CONTROLLER_ACTION_TO_PERMISSION[action.to_sym]
 
-    unless @configuration.custom_data_enabled? &&
-      (table.permission_bitmask & TABLE_PERMISSION_BITMASK[permission_to_check] > 0)
-
-      raise NoPermissionError
-    end
+    raise NoPermissionError unless @configuration.custom_data_enabled? && table.can?(action)
   end
 
   private
@@ -43,12 +39,5 @@ class PermissionChecker
     create: :create,
     update: :update,
     destroy: :delete
-  }.freeze
-
-  TABLE_PERMISSION_BITMASK = {
-    create: 0b1000,
-    read:   0b0100,
-    update: 0b0010,
-    delete: 0b0001
   }.freeze
 end

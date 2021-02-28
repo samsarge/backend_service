@@ -21,12 +21,23 @@ module Multitenanted
     before_save :configure_table_name!
     before_save :underscore_column_names!
 
+    PERMISSION_BITMASK = {
+      create: 0b1000,
+      read:   0b0100,
+      update: 0b0010,
+      delete: 0b0001
+    }.freeze
+
     def json_example
       {
         name.singularize => structure['columns'].each_with_object({}) do |col, hash|
           hash[col] = 'example'
         end
       }.to_json
+    end
+
+    def can?(action)
+      permission_bitmask & PERMISSION_BITMASK[action.to_sym] > 0
     end
 
     private
